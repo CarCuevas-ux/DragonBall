@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let posicionPersonaje1 = 50; // Posición inicial del personaje1 (en porcentaje)
     let posicionPersonaje2 = 50; // Posición inicial del personaje2 (en porcentaje)
 
-    // Movimiento del personaje1
+    // Movimiento del personaje1 con teclas
     document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowUp") {
             posicionPersonaje1 -= velocidadPersonaje1;
@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function lanzarPoder() {
         const poder = document.createElement("div");
         poder.classList.add("poder");
-        poder.style.left = "20%"; // Sale desde la posición de personaje2
+        poder.style.left = "10%"; // Sale desde la posición de personaje2
         poder.style.top = `${posicionPersonaje2}%`; // La posición de Personaje2
         contenedorJuego.appendChild(poder);
 
-        let posicionPoder = 20; // Posición inicial (en porcentaje)
+        let posicionPoder = 10; // Posición inicial del poder
 
         const animacion = setInterval(() => {
             posicionPoder += 2; // Velocidad del poder
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nube.src = `img/nube${id}.png`;
         nube.classList.add("nube");
         nube.style.top = `${Math.random() * 30 + 5}%`;
-        nube.style.left = `${Math.random() * 100}%`;
+        nube.style.left = `${100}%`; // Comienzan fuera de la pantalla
         contenedorJuego.appendChild(nube);
         moverElemento(nube, "nube");
     }
@@ -102,15 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
         arbol.src = `img/arbol${id}.png`;
         arbol.classList.add("arbol");
         arbol.style.bottom = "0";
-        arbol.style.left = `${Math.random() * 100}%`;
+        arbol.style.left = `${100 + Math.random() * 100}%`; // Asegura que el árbol comience fuera de la pantalla, pero de forma aleatoria
         contenedorJuego.appendChild(arbol);
-
-        const tiempoInicio = Math.random() * 5000; // Diferente tiempo para cada árbol
-        setTimeout(() => moverElemento(arbol, "arbol"), tiempoInicio);
+        moverElemento(arbol, "arbol");
     }
 
     function moverElemento(elemento, tipo) {
-        const velocidad = tipo === "nube" ? Math.random() * 10 + 15 : Math.random() * 10 + 20;
+        const velocidad = tipo === "nube" ? Math.random() * 15 + 20 : Math.random() * 10 + 30;
         let posicion = 100;
 
         const animacion = setInterval(() => {
@@ -118,18 +116,33 @@ document.addEventListener("DOMContentLoaded", () => {
             elemento.style.left = `${posicion}%`;
 
             if (posicion < -10) {
-                posicion = 100;
-                if (tipo === "nube") {
-                    elemento.style.top = `${Math.random() * 30 + 5}%`;
-                }
-                elemento.style.left = "100%";
+                clearInterval(animacion);
+                elemento.remove();
+                if (tipo === "nube") crearNube(Math.ceil(Math.random() * 4));
+                if (tipo === "arbol") crearArbol(Math.ceil(Math.random() * 4));
             }
         }, velocidad);
     }
 
-    // Crear nubes y árboles
+    // Crear nubes y árboles con intervalos regulares
     for (let i = 1; i <= 4; i++) {
         crearNube(i);
         crearArbol(i);
     }
+
+    // Funciones para los controles móviles
+    const botonArriba = document.getElementById("boton-arriba");
+    const botonAbajo = document.getElementById("boton-abajo");
+
+    botonArriba.addEventListener("click", () => {
+        posicionPersonaje1 -= velocidadPersonaje1;
+        if (posicionPersonaje1 < 0) posicionPersonaje1 = 0; // No puede salir por arriba
+        personaje1.style.top = `${posicionPersonaje1}%`;
+    });
+
+    botonAbajo.addEventListener("click", () => {
+        posicionPersonaje1 += velocidadPersonaje1;
+        if (posicionPersonaje1 > 90) posicionPersonaje1 = 90; // No puede salir por abajo
+        personaje1.style.top = `${posicionPersonaje1}%`;
+    });
 });
