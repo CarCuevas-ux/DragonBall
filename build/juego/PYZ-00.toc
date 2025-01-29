@@ -1,5 +1,4 @@
-('C:\\Users\\tolom\\Desktop\\Juegos con '
- 'Python\\Dragon-ball\\build\\juego\\PYZ-00.pyz',
+('C:\\Users\\tolom\\Desktop\\Practicas-JS\\DragonBall\\build\\juego\\PYZ-00.pyz',
  [('__future__',
    'C:\\Users\\tolom\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\__future__.py',
    'PYMODULE'),
